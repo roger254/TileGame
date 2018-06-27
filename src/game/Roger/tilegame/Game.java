@@ -2,6 +2,8 @@ package game.Roger.tilegame;
 
 import game.Roger.tilegame.display.Display;
 import game.Roger.tilegame.gfx.Assets;
+import game.Roger.tilegame.state.GameState;
+import game.Roger.tilegame.state.State;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -25,6 +27,9 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     private BufferStrategy bs;
     private Graphics g; //to draw the image
 
+    //States
+    private State gameState;
+
     //Game class constructor
     public Game(String title, int width, int height) {
         this.width = width;
@@ -36,14 +41,17 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     private void init() {
         //initialize display
         display = new Display(title, width, height); //create display in Game
-
         //load images
         Assets.init();
+        //gameState
+        gameState = new GameState();//initialize to game state
+        State.setCurrentState(gameState); //current game state is GameState
     }
 
     //update variable and objects
     private void tick() {
-
+        if (State.getCurrentState() != null)
+            State.getCurrentState().tick();
     }
 
     //draw on screen
@@ -60,7 +68,8 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         g.clearRect(0, 0, width, height);//clear whole screen
         //<-Draw here->
 
-        g.drawImage(Assets.grass, 10,10,null); //draw grass to the screen
+        if (State.getCurrentState() != null)
+            State.getCurrentState().render(g);
 
         //End Drawing
         //tell java to display on screen
@@ -71,14 +80,39 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     @Override
     public void run() {
         init();
+
+        long oneSecond = 1000000000;
+        int fps = 60; //frames per second -> how many times the tick method is called
+        double timePerTick = oneSecond / fps; //time in nano seconds(1 second in nano seconds)
+        double delta = 0;//time till tick and render are called again
+        long now;
+        long lastTime = System.nanoTime(); //current time in nanoseconds
+        long timer = 0; // count till one second and print counter
+        int ticks = 0; // number of times tick and render method are called
+
         /*
          Game loop
         -> update all variable, positions of objects etc
         -> Render (Draw) everything to the screen
          */
         while (running) {
-            tick();
-            render();
+            now = System.nanoTime();//current time of game loop start
+            delta += (now - lastTime) / timePerTick;
+            timer += now - lastTime; //time past since block of code was called
+            lastTime = now; // last time when the block of code was run
+
+            if (delta >= 1) {
+                tick();
+                render();
+                ticks++;
+                delta--;
+            }
+            if (timer >= oneSecond) //timer has exceeded one second
+            {
+                System.out.println("Ticks and Frames: " + ticks);
+                ticks = 0;
+                timer = 0;
+            }
         }
 
         stop(); //stop the thread

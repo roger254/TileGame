@@ -1,5 +1,7 @@
 package game.Roger.tilegame.state;
 
+import game.Roger.tilegame.Game;
+
 import java.awt.*;
 
 //state like menu, setting and game itself
@@ -17,6 +19,12 @@ public abstract class State {
     }
 
     //End of game state manager
+
+    protected Game game;
+
+    public State(Game game) {
+        this.game = game;
+    }
 
     //all State subclasses implement these methods
     public abstract void tick();

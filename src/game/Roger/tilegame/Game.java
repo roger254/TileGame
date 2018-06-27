@@ -2,6 +2,7 @@ package game.Roger.tilegame;
 
 import game.Roger.tilegame.display.Display;
 import game.Roger.tilegame.gfx.Assets;
+import game.Roger.tilegame.input.KeyManager;
 import game.Roger.tilegame.state.GameState;
 import game.Roger.tilegame.state.MenuState;
 import game.Roger.tilegame.state.SettingsState;
@@ -33,28 +34,35 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     private State menuState;
     private State settingsState;
 
+    //Input(keyboard)
+    private KeyManager keyManager;
+
     //Game class constructor
     public Game(String title, int width, int height) {
         this.width = width;
         this.height = height;
         this.title = title;
+        keyManager = new KeyManager();
     }
 
     //initialize graphics of the game
     private void init() {
         //initialize display
         display = new Display(title, width, height); //create display in Game
+        display.getFrame().addKeyListener(keyManager);//get key press
         //load images
         Assets.init();
         //gameState
-        gameState = new GameState();//initialize game state
-        menuState = new MenuState();//initialize menu State
-        settingsState = new SettingsState(); //initialize settings State
+        gameState = new GameState(this);//initialize game state
+        menuState = new MenuState(this);//initialize menu State
+        settingsState = new SettingsState(this); //initialize settings State
         State.setCurrentState(gameState); //current game state is GameState
     }
 
     //update variable and objects
     private void tick() {
+        keyManager.tick();// for the key manager
+
         if (State.getCurrentState() != null)
             State.getCurrentState().tick();
     }
@@ -121,6 +129,10 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         }
 
         stop(); //stop the thread
+    }
+
+    public KeyManager getKeyManager() {
+        return keyManager;
     }
 
     //run the thread

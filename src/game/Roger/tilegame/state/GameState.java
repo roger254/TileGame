@@ -1,23 +1,24 @@
 package game.Roger.tilegame.state;
 
-
-import game.Roger.tilegame.gfx.Assets;
+import game.Roger.tilegame.entities.creatures.Player;
 
 import java.awt.*;
 
 public class GameState extends State {
 
-    public GameState() {
+    private Player player;
 
+    public GameState() {
+        player = new Player(100, 100);
     }
 
     @Override
     public void tick() {
-
+        player.tick();
     }
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(Assets.dirt, 0, 0, null);//render dirt tile
+        player.render(graphics);
     }
 }

@@ -3,6 +3,8 @@ package game.Roger.tilegame;
 import game.Roger.tilegame.display.Display;
 import game.Roger.tilegame.gfx.Assets;
 import game.Roger.tilegame.state.GameState;
+import game.Roger.tilegame.state.MenuState;
+import game.Roger.tilegame.state.SettingsState;
 import game.Roger.tilegame.state.State;
 
 import java.awt.*;
@@ -17,7 +19,6 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     public String title;
     private boolean running = false;
 
-
     private Thread thread; //thread object
     /*
     BufferStrategy tell the computer how to draw on screen(uses buffers)
@@ -29,6 +30,8 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
 
     //States
     private State gameState;
+    private State menuState;
+    private State settingsState;
 
     //Game class constructor
     public Game(String title, int width, int height) {
@@ -44,7 +47,9 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         //load images
         Assets.init();
         //gameState
-        gameState = new GameState();//initialize to game state
+        gameState = new GameState();//initialize game state
+        menuState = new MenuState();//initialize menu State
+        settingsState = new SettingsState(); //initialize settings State
         State.setCurrentState(gameState); //current game state is GameState
     }
 

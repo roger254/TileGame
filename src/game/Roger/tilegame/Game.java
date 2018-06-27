@@ -1,12 +1,10 @@
 package game.Roger.tilegame;
 
 import game.Roger.tilegame.display.Display;
-import game.Roger.tilegame.gfx.ImageLoader;
-import game.Roger.tilegame.gfx.SpriteSheet;
+import game.Roger.tilegame.gfx.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 
 //main class for the game
 public class Game implements Runnable { //Runnable makes this class run on it own thread
@@ -17,8 +15,6 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     public String title;
     private boolean running = false;
 
-    private BufferedImage test;
-    private SpriteSheet sheet;
 
     private Thread thread; //thread object
     /*
@@ -40,8 +36,9 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     private void init() {
         //initialize display
         display = new Display(title, width, height); //create display in Game
-        test = ImageLoader.loadImage("/textures/sheet.png"); //load image
-        sheet = new SpriteSheet(test); //load the image to spireSheet object
+
+        //load images
+        Assets.init();
     }
 
     //update variable and objects
@@ -63,22 +60,7 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         g.clearRect(0, 0, width, height);//clear whole screen
         //<-Draw here->
 
-       // g.drawImage(sheet.crop(0,0,32,32),5,5,null); //get the green part
-        //32 for x is the starting pixel for the image and
-        g.drawImage(sheet.crop(32,0,32,32),5,5,null); //get the blue part
-
-        /*
-        draw without color fill
-        g.drawRect(10, 50, 50, 70);//draw rectangle
-
-        //draw with color
-        g.setColor(Color.BLUE); //fill with certain Color
-        g.fillRect(10, 50, 50, 70);//draw rectangle
-        g.setColor(Color.GREEN);
-        g.fillRect(0,0, 10,10);
-        */
-
-
+        g.drawImage(Assets.grass, 10,10,null); //draw grass to the screen
 
         //End Drawing
         //tell java to display on screen

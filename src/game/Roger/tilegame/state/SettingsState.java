@@ -1,13 +1,13 @@
 package game.Roger.tilegame.state;
 
-import game.Roger.tilegame.Game;
+import game.Roger.tilegame.Handler;
 
 import java.awt.*;
 
 public class SettingsState extends State {
 
-    public SettingsState(Game game) {
-        super(game);
+    public SettingsState(Handler handler) {
+        super(handler);
     }
 
     @Override

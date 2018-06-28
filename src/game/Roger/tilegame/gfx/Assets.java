@@ -18,7 +18,7 @@ public class Assets
         SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet.png"));
 
         //setting the images from their positions
-        player = sheet.crop(0,0, height,width) ;
+        player = sheet.crop(width * 4, 0, height, width);
         dirt = sheet.crop(width,0,height,width);
         grass = sheet.crop(width * 2, 0 , height, width);
         stone = sheet.crop(width * 3, 0, height, width);

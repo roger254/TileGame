@@ -1,6 +1,6 @@
 package game.Roger.tilegame.state;
 
-import game.Roger.tilegame.Game;
+import game.Roger.tilegame.Handler;
 
 import java.awt.*;
 
@@ -20,10 +20,10 @@ public abstract class State {
 
     //End of game state manager
 
-    protected Game game;
+    protected Handler handler;
 
-    public State(Game game) {
-        this.game = game;
+    public State(Handler handler) {
+        this.handler = handler;
     }
 
     //all State subclasses implement these methods

@@ -41,6 +41,9 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     //Camera
     private GameCamera gameCamera;
 
+    //Handler
+    private Handler handler;
+
     //Game class constructor
     public Game(String title, int width, int height) {
         this.width = width;
@@ -58,10 +61,12 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         Assets.init();
         //loadCamera
         gameCamera = new GameCamera(this, 0, 0);
+        //handler
+        handler = new Handler(this);
         //gameState
-        gameState = new GameState(this);//initialize game state
-        menuState = new MenuState(this);//initialize menu State
-        settingsState = new SettingsState(this); //initialize settings State
+        gameState = new GameState(handler);//initialize game state
+        menuState = new MenuState(handler);//initialize menu State
+        settingsState = new SettingsState(handler); //initialize settings State
         State.setCurrentState(gameState); //current game state is GameState
     }
 

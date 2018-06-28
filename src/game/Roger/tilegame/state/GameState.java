@@ -1,6 +1,6 @@
 package game.Roger.tilegame.state;
 
-import game.Roger.tilegame.Game;
+import game.Roger.tilegame.Handler;
 import game.Roger.tilegame.entities.creatures.Player;
 import game.Roger.tilegame.worlds.World;
 
@@ -12,10 +12,12 @@ public class GameState extends State {
     //World class
     private World world;
 
-    public GameState(Game game) {
-        super(game);
-        player = new Player(game, 100, 100);
-        world = new World(game, "Res/worlds/world1.txt");
+    public GameState(Handler handler) {
+        super(handler);
+        world = new World(handler, "Res/worlds/world1.txt");
+        handler.setWorld(world);
+        player = new Player(handler, 100, 100);
+
     }
 
     @Override

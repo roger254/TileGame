@@ -1,18 +1,18 @@
 package game.Roger.tilegame.entities;
 
-import game.Roger.tilegame.Game;
+import game.Roger.tilegame.Handler;
 
 import java.awt.*;
 
 public abstract class Entity {
 
     //requirement for all entities
-    protected Game game;
+    protected Handler handler;
     protected float x, y; // entity movement(float to achieve smooth movement)
     protected int width, height; // of the height
 
-    public Entity(Game game, float x, float y, int width, int height) {
-        this.game = game;
+    public Entity(Handler handler, float x, float y, int width, int height) {
+        this.handler = handler;
         this.x = x;
         this.y = y;
         this.width = width;

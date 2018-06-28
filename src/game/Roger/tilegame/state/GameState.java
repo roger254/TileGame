@@ -2,6 +2,7 @@ package game.Roger.tilegame.state;
 
 import game.Roger.tilegame.Game;
 import game.Roger.tilegame.entities.creatures.Player;
+import game.Roger.tilegame.tiles.Tile;
 
 import java.awt.*;
 
@@ -22,5 +23,6 @@ public class GameState extends State {
     @Override
     public void render(Graphics graphics) {
         player.render(graphics);
+        Tile.tiles[0].render(graphics, 0, 0);// render grass tile
     }
 }

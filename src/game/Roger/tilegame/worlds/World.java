@@ -1,12 +1,14 @@
 package game.Roger.tilegame.worlds;
 
 import game.Roger.tilegame.tiles.Tile;
+import game.Roger.tilegame.utils.Utils;
 
 import java.awt.*;
 
 public class World {
 
-    private int width, height;
+    private int width, height; //of the world
+    private int spawnX, spawnY; //spawning position of the player
     private int[][] tiles; //to store all the tiles
 
     public World(String path) {
@@ -34,13 +36,17 @@ public class World {
 
     //load world from file
     private void loadWorld(String path) {
-        width = 5;
-        height = 5;
-        tiles = new int[width][height];
+        String file = Utils.loadFileAsString(path);
+        String[] tokens = file.split("\\s+"); //split numbers from file into tokens
+        width = Utils.parseInt(tokens[0]); //->5 first line (5 , 7) from world1.txt
+        height = Utils.parseInt(tokens[1]); //->7 first line (5, 7) from world1.txt
+        spawnX = Utils.parseInt(tokens[2]); //->0 second line(0, 0) from world1.txt
+        spawnY = Utils.parseInt(tokens[3]);//->0 second line(0, 0) from world1.txt
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                tiles[x][y] = 1; //set to dirtTile
+        tiles = new int[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tiles[x][y] = Utils.parseInt(tokens[(x + y * width) + 4]);
             }
         }
     }

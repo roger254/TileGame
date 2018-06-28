@@ -1,5 +1,6 @@
 package game.Roger.tilegame.worlds;
 
+import game.Roger.tilegame.Game;
 import game.Roger.tilegame.tiles.Tile;
 import game.Roger.tilegame.utils.Utils;
 
@@ -7,21 +8,25 @@ import java.awt.*;
 
 public class World {
 
+    private Game game;
     private int width, height; //of the world
     private int spawnX, spawnY; //spawning position of the player
     private int[][] tiles; //to store all the tiles
 
-    public World(String path) {
+    public World(Game game, String path) {
+        this.game = game;
         loadWorld(path);
     }
 
     public void tick() {
     }
 
+    //the world (what should show in screen
     public void render(Graphics g) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                getTile(x, y).render(g, x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT); //convert into pixels
+                getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - game.getGameCamera().getxOffset()),
+                        (int) (y * Tile.TILEHEIGHT - game.getGameCamera().getyOffset())); //convert into pixels
             }
         }
     }

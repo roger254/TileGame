@@ -2,6 +2,7 @@ package game.Roger.tilegame;
 
 import game.Roger.tilegame.display.Display;
 import game.Roger.tilegame.gfx.Assets;
+import game.Roger.tilegame.gfx.GameCamera;
 import game.Roger.tilegame.input.KeyManager;
 import game.Roger.tilegame.state.GameState;
 import game.Roger.tilegame.state.MenuState;
@@ -16,7 +17,7 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
 
     private Display display; //display class instance
 
-    public int width, height;
+    private int width, height;
     public String title;
     private boolean running = false;
 
@@ -37,6 +38,9 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     //Input(keyboard)
     private KeyManager keyManager;
 
+    //Camera
+    private GameCamera gameCamera;
+
     //Game class constructor
     public Game(String title, int width, int height) {
         this.width = width;
@@ -52,6 +56,8 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         display.getFrame().addKeyListener(keyManager);//get key press
         //load images
         Assets.init();
+        //loadCamera
+        gameCamera = new GameCamera(this, 0, 0);
         //gameState
         gameState = new GameState(this);//initialize game state
         menuState = new MenuState(this);//initialize menu State
@@ -135,6 +141,9 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         return keyManager;
     }
 
+    public GameCamera getGameCamera() {
+        return gameCamera;
+    }
     //run the thread
     public synchronized void start() {
         if (running) return; //check game is already running (game loop)
@@ -153,5 +162,21 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

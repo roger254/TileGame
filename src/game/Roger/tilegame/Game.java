@@ -1,24 +1,25 @@
 package game.Roger.tilegame;
 
 import game.Roger.tilegame.display.Display;
-import game.Roger.tilegame.gfx.ImageLoader;
-import game.Roger.tilegame.gfx.SpriteSheet;
+import game.Roger.tilegame.gfx.Assets;
+import game.Roger.tilegame.gfx.GameCamera;
+import game.Roger.tilegame.input.KeyManager;
+import game.Roger.tilegame.state.GameState;
+import game.Roger.tilegame.state.MenuState;
+import game.Roger.tilegame.state.SettingsState;
+import game.Roger.tilegame.state.State;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 
 //main class for the game
 public class Game implements Runnable { //Runnable makes this class run on it own thread
 
     private Display display; //display class instance
 
-    public int width, height;
+    private int width, height;
     public String title;
     private boolean running = false;
-
-    private BufferedImage test;
-    private SpriteSheet sheet;
 
     private Thread thread; //thread object
     /*
@@ -29,24 +30,47 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     private BufferStrategy bs;
     private Graphics g; //to draw the image
 
+    //States
+    private State gameState;
+    private State menuState;
+    private State settingsState;
+
+    //Input(keyboard)
+    private KeyManager keyManager;
+
+    //Camera
+    private GameCamera gameCamera;
+
     //Game class constructor
     public Game(String title, int width, int height) {
         this.width = width;
         this.height = height;
         this.title = title;
+        keyManager = new KeyManager();
     }
 
     //initialize graphics of the game
     private void init() {
         //initialize display
         display = new Display(title, width, height); //create display in Game
-        test = ImageLoader.loadImage("/textures/sheet.png"); //load image
-        sheet = new SpriteSheet(test); //load the image to spireSheet object
+        display.getFrame().addKeyListener(keyManager);//get key press
+        //load images
+        Assets.init();
+        //loadCamera
+        gameCamera = new GameCamera(this, 0, 0);
+        //gameState
+        gameState = new GameState(this);//initialize game state
+        menuState = new MenuState(this);//initialize menu State
+        settingsState = new SettingsState(this); //initialize settings State
+        State.setCurrentState(gameState); //current game state is GameState
     }
 
     //update variable and objects
     private void tick() {
+        keyManager.tick();// for the key manager
 
+        if (State.getCurrentState() != null)
+            State.getCurrentState().tick();
     }
 
     //draw on screen
@@ -63,22 +87,8 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         g.clearRect(0, 0, width, height);//clear whole screen
         //<-Draw here->
 
-       // g.drawImage(sheet.crop(0,0,32,32),5,5,null); //get the green part
-        //32 for x is the starting pixel for the image and
-        g.drawImage(sheet.crop(32,0,32,32),5,5,null); //get the blue part
-
-        /*
-        draw without color fill
-        g.drawRect(10, 50, 50, 70);//draw rectangle
-
-        //draw with color
-        g.setColor(Color.BLUE); //fill with certain Color
-        g.fillRect(10, 50, 50, 70);//draw rectangle
-        g.setColor(Color.GREEN);
-        g.fillRect(0,0, 10,10);
-        */
-
-
+        if (State.getCurrentState() != null)
+            State.getCurrentState().render(g);
 
         //End Drawing
         //tell java to display on screen
@@ -89,19 +99,51 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     @Override
     public void run() {
         init();
+
+        long oneSecond = 1000000000;
+        int fps = 60; //frames per second -> how many times the tick method is called
+        double timePerTick = oneSecond / fps; //time in nano seconds(1 second in nano seconds)
+        double delta = 0;//time till tick and render are called again
+        long now;
+        long lastTime = System.nanoTime(); //current time in nanoseconds
+        long timer = 0; // count till one second and print counter
+        int ticks = 0; // number of times tick and render method are called
+
         /*
          Game loop
         -> update all variable, positions of objects etc
         -> Render (Draw) everything to the screen
          */
         while (running) {
-            tick();
-            render();
+            now = System.nanoTime();//current time of game loop start
+            delta += (now - lastTime) / timePerTick;
+            timer += now - lastTime; //time past since block of code was called
+            lastTime = now; // last time when the block of code was run
+
+            if (delta >= 1) {
+                tick();
+                render();
+                ticks++;
+                delta--;
+            }
+            if (timer >= oneSecond) //timer has exceeded one second
+            {
+                System.out.println("Ticks and Frames: " + ticks);
+                ticks = 0;
+                timer = 0;
+            }
         }
 
         stop(); //stop the thread
     }
 
+    public KeyManager getKeyManager() {
+        return keyManager;
+    }
+
+    public GameCamera getGameCamera() {
+        return gameCamera;
+    }
     //run the thread
     public synchronized void start() {
         if (running) return; //check game is already running (game loop)
@@ -120,5 +162,21 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 }

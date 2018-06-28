@@ -10,25 +10,36 @@ public class Player extends Creature {
     private Game game;
 
     public Player(Game game, float x, float y) {
-        super(x, y);
+        super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
         this.game = game;
     }
 
     @Override
     public void tick() {
-        //test code
+        getInput();//get user input
+        move();
+    }
+
+    private void getInput() {
+        //handling how input should do
+        //reset to zero
+        xMove = 0;
+        yMove = 0;
+
+        //get keyboard input
         if (game.getKeyManager().up)
-            y -= 3;
+            yMove = -speed; //y axis is flipped around in computer graphics
         if (game.getKeyManager().down)
-            y += 3;
+            yMove = speed;
         if (game.getKeyManager().left)
-            x -= 3;
+            xMove = -speed;
         if (game.getKeyManager().right)
-            x += 3;
+            xMove = speed;
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.player, (int) x, (int) y, null); //parse the x and y to int
+        //pass width and height from the Creature class(are protected)
+        g.drawImage(Assets.player, (int) x, (int) y, width, height, null); //parse the x and y to int
     }
 }

@@ -38,6 +38,10 @@ public class World {
     }
 
     public Tile getTile(int x, int y) {
+        //check if player is still in map limits
+        if (x < 0 || y < 0 || x >= width || y >= height)
+            return Tile.grassTile; // return grass tile if player is beyond limits
+
         //Tile.tile -> tile array in Tile class
         Tile t = Tile.tiles[tiles[x][y]];
         if (t == null)

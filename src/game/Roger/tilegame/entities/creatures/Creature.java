@@ -2,6 +2,7 @@ package game.Roger.tilegame.entities.creatures;
 
 import game.Roger.tilegame.Handler;
 import game.Roger.tilegame.entities.Entity;
+import game.Roger.tilegame.tiles.Tile;
 
 public abstract class Creature extends Entity {
 
@@ -26,8 +27,51 @@ public abstract class Creature extends Entity {
     }
 
     public void move() {
-        x += xMove;//add x to the move value(ie speed)
-        y += yMove;
+        moveX();
+        moveY();
+    }
+
+    public void moveX() {
+        if (xMove > 0) //Moving right
+        {
+            int tx = (int) (x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH;
+            //check tile we moving to if it is solid(right up corner and lower right corner
+            if (!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+                    !collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)) {
+                x += xMove;
+            }
+        } else if (xMove < 0) //Move left
+        {
+            int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH;
+
+            if (!collisionWithTile(tx, (int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+                    !collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)) {
+                x += xMove;
+            }
+        }
+    }
+
+    public void moveY() {
+        if (yMove < 0)//moving up
+        {
+            int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT; //top edge of bounding rectangle
+            if (!collisionWithTile((int) (x + bounds.x) / Tile.TILEWIDTH, ty) &&
+                    !collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILEWIDTH, ty)) {
+                y += yMove;
+            }
+        } else if (yMove > 0) //moving down
+        {
+            int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILEHEIGHT; //top edge of bounding rectangle
+            if (!collisionWithTile((int) (x + bounds.x) / Tile.TILEWIDTH, ty) &&
+                    !collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILEWIDTH, ty)) {
+                y += yMove;
+            }
+        }
+    }
+
+    protected boolean collisionWithTile(int x, int y) {
+        //check if tile at x, y is solid
+        return handler.getWorld().getTile(x, y).isSolid();
     }
 
     //Getters and Setters

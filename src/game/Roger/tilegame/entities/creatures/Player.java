@@ -10,6 +10,12 @@ public class Player extends Creature {
 
     public Player(Handler handler, float x, float y) {
         super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+
+        //set bounding rectangle(custom for player)
+        bounds.x = 16; //16px from the left of x coordinate of the player
+        bounds.y = 32; //32 px down from the x coordinate of the player
+        bounds.width = 32;
+        bounds.height = 32;
     }
 
     @Override
@@ -40,5 +46,12 @@ public class Player extends Creature {
     public void render(Graphics g) {
         //pass width and height from the Creature class(are protected)
         g.drawImage(Assets.player, (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null); //parse the x and y to int
+
+
+        g.setColor(Color.RED); //set color of graphics
+        g.fillRect((int) (x + bounds.x - handler.getGameCamera().getxOffset()),
+                (int) (y + bounds.y - handler.getGameCamera().getyOffset()),
+                bounds.width, bounds.height);
+
     }
 }

@@ -1,27 +1,44 @@
 package game.Roger.tilegame.gfx;
 
-import game.Roger.tilegame.Game;
+import game.Roger.tilegame.Handler;
 import game.Roger.tilegame.entities.Entity;
+import game.Roger.tilegame.tiles.Tile;
 
 public class GameCamera {
 
-    private Game game;
+    private Handler handler;
     private float xOffset, yOffset; //from its original position -> span of camera view
 
-    public GameCamera(Game game, float xOffset, float yOffset) {
-        this.game = game;
+    public GameCamera(Handler handler, float xOffset, float yOffset) {
+        this.handler = handler;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
     }
 
+    public void checkBlankSpace()//check if camera is showing any blank space
+    {
+        if (xOffset < 0) {
+            xOffset = 0;//left side of map
+        } else if (xOffset > handler.getWorld().getWidth() * Tile.TILEWIDTH - handler.getWidth()) {
+            xOffset = handler.getWorld().getWidth() * Tile.TILEWIDTH - handler.getWidth();
+        }
+        if (yOffset < 0) {
+            yOffset = 0;//top side of map
+        } else if (yOffset > handler.getWorld().getHeight() * Tile.TILEHEIGHT - handler.getHeight()) {
+            yOffset = handler.getWorld().getHeight() * Tile.TILEHEIGHT - handler.getHeight();
+        }
+    }
+
     public void centerOnEntity(Entity e) {
-        xOffset = e.getX() - game.getWidth() / 2 + e.getWidth() / 2;
-        yOffset = e.getY() - game.getHeight() / 2 + e.getWidth() / 2;
+        xOffset = e.getX() - handler.getWidth() / 2 + e.getWidth() / 2;
+        yOffset = e.getY() - handler.getHeight() / 2 + e.getWidth() / 2;
+        checkBlankSpace();
     }
 
     public void move(float xAmt, float yAmt) {
         xOffset += xAmt;
         yOffset += yAmt;
+        checkBlankSpace();
     }
 
     public float getxOffset() {

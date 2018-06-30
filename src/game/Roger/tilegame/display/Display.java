@@ -1,4 +1,5 @@
 package game.Roger.tilegame.display;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,17 +11,16 @@ public class Display {
     private int width, height; //pixels //of window
 
     //Display constructor
-    public Display(String title, int width, int height)
-    {
-        this.title  = title;
+    public Display(String title, int width, int height) {
+        this.title = title;
         this.width = width;
         this.height = height;
 
         createDisplay();//initialize JFrame
     }
+
     //initialize JFrame
-    private void createDisplay()
-    {
+    private void createDisplay() {
         frame = new JFrame(title); //initialize and set title
         frame.setSize(width, height); //pass width and height of window
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //window and program closes down properly
@@ -41,8 +41,7 @@ public class Display {
         frame.pack(); //fit canvas to JFrame
     }
 
-    public Canvas getCanvas()
-    {
+    public Canvas getCanvas() {
         return canvas;
     }
 

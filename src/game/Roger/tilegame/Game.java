@@ -15,10 +15,9 @@ import java.awt.image.BufferStrategy;
 //main class for the game
 public class Game implements Runnable { //Runnable makes this class run on it own thread
 
-    private Display display; //display class instance
-
-    private int width, height;
     public String title;
+    private Display display; //display class instance
+    private int width, height;
     private boolean running = false;
 
     private Thread thread; //thread object
@@ -59,10 +58,10 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         display.getFrame().addKeyListener(keyManager);//get key press
         //load images
         Assets.init();
-        //loadCamera
-        gameCamera = new GameCamera(this, 0, 0);
         //handler
         handler = new Handler(this);
+        //loadCamera
+        gameCamera = new GameCamera(handler, 0, 0);
         //gameState
         gameState = new GameState(handler);//initialize game state
         menuState = new MenuState(handler);//initialize menu State
@@ -149,6 +148,7 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     public GameCamera getGameCamera() {
         return gameCamera;
     }
+
     //run the thread
     public synchronized void start() {
         if (running) return; //check game is already running (game loop)

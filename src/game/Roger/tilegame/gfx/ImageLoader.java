@@ -5,11 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 //this class will load images only
-public class ImageLoader
-{
+public class ImageLoader {
     //load the image from set path 
-    public static BufferedImage loadImage(String path)
-    {
+    public static BufferedImage loadImage(String path) {
         try {
             //return Buffered Image object of the loaded image
             return ImageIO.read(ImageLoader.class.getResource(path));

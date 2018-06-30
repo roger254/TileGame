@@ -1,12 +1,16 @@
 package game.Roger.tilegame.entities.creatures;
 
 import game.Roger.tilegame.Handler;
+import game.Roger.tilegame.gfx.Animation;
 import game.Roger.tilegame.gfx.Assets;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Player extends Creature {
 
+    //Animations
+    private Animation downAnimation, upAnimation, leftAnimation, rightAnimation;
 
     public Player(Handler handler, float x, float y) {
         super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -16,10 +20,22 @@ public class Player extends Creature {
         bounds.y = 32; //32 px down from the x coordinate of the player
         bounds.width = 32;
         bounds.height = 32;
+
+        //Animations
+        downAnimation = new Animation(500, Assets.playerDown);//500 half a second
+        upAnimation = new Animation(500, Assets.playerUp);
+        leftAnimation = new Animation(500, Assets.playerLeft);
+        rightAnimation = new Animation(500, Assets.playerRight);
     }
 
     @Override
     public void tick() {
+        //Animations
+        downAnimation.tick();
+        upAnimation.tick();
+        leftAnimation.tick();
+        rightAnimation.tick();
+        //Movement
         getInput();//get user input
         move();
         handler.getGameCamera().centerOnEntity(this);
@@ -45,7 +61,7 @@ public class Player extends Creature {
     @Override
     public void render(Graphics g) {
         //pass width and height from the Creature class(are protected)
-        g.drawImage(Assets.player, (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null); //parse the x and y to int
+        g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null); //parse the x and y to int
 
 
         /* //color bounding box
@@ -54,6 +70,19 @@ public class Player extends Creature {
                 (int) (y + bounds.y - handler.getGameCamera().getyOffset()),
                 bounds.width, bounds.height);
                 */
+    }
 
+    private BufferedImage getCurrentAnimationFrame() {
+        if (xMove < 0) { //moving to left
+            return leftAnimation.getCurrentFrame();
+        } else if (xMove > 0) //moving to right
+        {
+            return rightAnimation.getCurrentFrame();
+        } else if (yMove < 0) //moving up
+        {
+            return upAnimation.getCurrentFrame();
+        } else {
+            return downAnimation.getCurrentFrame();
+        }
     }
 }

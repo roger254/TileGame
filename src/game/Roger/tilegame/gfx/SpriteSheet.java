@@ -11,7 +11,7 @@ public class SpriteSheet {
     }
 
     //crop image and bring out individual parts
-    public BufferedImage crop(int x, int y, int height, int width) {
-        return sheet.getSubimage(x, y, height, width); //x and y coordinates with the height of the image
+    public BufferedImage crop(int x, int y, int width, int height) {
+        return sheet.getSubimage(x, y, width, height); //x and y coordinates with the height of the image
     }
 }

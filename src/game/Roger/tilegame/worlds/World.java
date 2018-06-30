@@ -1,6 +1,9 @@
 package game.Roger.tilegame.worlds;
 
 import game.Roger.tilegame.Handler;
+import game.Roger.tilegame.entities.EntityManager;
+import game.Roger.tilegame.entities.creatures.Player;
+import game.Roger.tilegame.entities.statics.Tree;
 import game.Roger.tilegame.tiles.Tile;
 import game.Roger.tilegame.utils.Utils;
 
@@ -13,12 +16,25 @@ public class World {
     private int spawnX, spawnY; //spawning position of the player
     private int[][] tiles; //to store all the tiles
 
+    //Entities
+    private EntityManager entityManager;
     public World(Handler handler, String path) {
         this.handler = handler;
+        //add player
+        entityManager = new EntityManager(handler, new Player(handler, 100, 100));
+        entityManager.addEntity(new Tree(handler, 100, 250));
+        entityManager.addEntity(new Tree(handler, 100, 350));
+        entityManager.addEntity(new Tree(handler, 100, 450));
+
         loadWorld(path);
+
+        //spawn player at
+        entityManager.getPlayer().setX(spawnX);
+        entityManager.getPlayer().setY(spawnY);
     }
 
     public void tick() {
+        entityManager.tick();//tick all entities
     }
 
     //the world (what should show in screen
@@ -35,6 +51,8 @@ public class World {
                         (int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset())); //convert into pixels
             }
         }
+        //Entity
+        entityManager.render(g);
     }
 
     public Tile getTile(int x, int y) {

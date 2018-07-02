@@ -17,6 +17,7 @@ public class EntityManager {
         this.handler = handler;
         this.player = player;
         entities = new ArrayList<>();
+        addEntity(player);
     }
 
     public void tick() {
@@ -24,14 +25,12 @@ public class EntityManager {
             Entity e = entities.get(i);
             e.tick();
         }
-        player.tick();
     }
 
     public void render(Graphics graphics) {
         for (Entity e : entities) {
             e.render(graphics);
         }
-        player.render(graphics);
     }
 
     public void addEntity(Entity e) {

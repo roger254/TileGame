@@ -2,6 +2,7 @@ package game.Roger.tilegame;
 
 import game.Roger.tilegame.gfx.GameCamera;
 import game.Roger.tilegame.input.KeyManager;
+import game.Roger.tilegame.input.MouseManager;
 import game.Roger.tilegame.worlds.World;
 
 public class Handler {
@@ -21,6 +22,9 @@ public class Handler {
         return game.getKeyManager();
     }
 
+    public MouseManager getMouseManager() {
+        return game.getMouseManager();
+    }
     public int getWidth() {
         return game.getWidth();
     }

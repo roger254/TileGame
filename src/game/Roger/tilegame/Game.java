@@ -4,6 +4,7 @@ import game.Roger.tilegame.display.Display;
 import game.Roger.tilegame.gfx.Assets;
 import game.Roger.tilegame.gfx.GameCamera;
 import game.Roger.tilegame.input.KeyManager;
+import game.Roger.tilegame.input.MouseManager;
 import game.Roger.tilegame.state.GameState;
 import game.Roger.tilegame.state.MenuState;
 import game.Roger.tilegame.state.SettingsState;
@@ -30,12 +31,13 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
     private Graphics g; //to draw the image
 
     //States
-    private State gameState;
-    private State menuState;
+    public State gameState;
+    public State menuState;
     private State settingsState;
 
-    //Input(keyboard)
+    //Input
     private KeyManager keyManager;
+    private MouseManager mouseManager;
 
     //Camera
     private GameCamera gameCamera;
@@ -49,13 +51,19 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         this.height = height;
         this.title = title;
         keyManager = new KeyManager();
+        mouseManager = new MouseManager();
     }
 
     //initialize graphics of the game
     private void init() {
         //initialize display
         display = new Display(title, width, height); //create display in Game
+        //get inputs(keyboard and mouse
         display.getFrame().addKeyListener(keyManager);//get key press
+        display.getFrame().addMouseListener(mouseManager);
+        display.getFrame().addMouseMotionListener(mouseManager);
+        display.getCanvas().addMouseListener(mouseManager);
+        display.getCanvas().addMouseMotionListener(mouseManager);
         //load images
         Assets.init();
         //handler
@@ -66,7 +74,7 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
         gameState = new GameState(handler);//initialize game state
         menuState = new MenuState(handler);//initialize menu State
         settingsState = new SettingsState(handler); //initialize settings State
-        State.setCurrentState(gameState); //current game state is GameState
+        State.setCurrentState(menuState); //current game state is GameState
     }
 
     //update variable and objects
@@ -143,6 +151,10 @@ public class Game implements Runnable { //Runnable makes this class run on it ow
 
     public KeyManager getKeyManager() {
         return keyManager;
+    }
+
+    public MouseManager getMouseManager() {
+        return mouseManager;
     }
 
     public GameCamera getGameCamera() {

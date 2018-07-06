@@ -11,10 +11,16 @@ public class Assets {
     public static BufferedImage dirt, grass, stone, tree, rock;
     public static BufferedImage[] playerUp, playerDown, playerLeft, playerRight;
     public static BufferedImage[] zombieUp, zombieDown, zombieLeft, zombieRight;
+    public static BufferedImage[] btn_start;
     //method to load in all assets
     public static void init() {
         //load the image to through the spriteSheet
         SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet.png"));
+
+        //loading the start and stop buttons(menu)
+        btn_start = new BufferedImage[2];//0 =start 1 = stop
+        btn_start[0] = sheet.crop(width * 6, height * 4, width * 2, height);
+        btn_start[1] = sheet.crop(width * 6, height * 5, width * 2, height);
 
         //setting the images from their positions
         playerUp = new BufferedImage[2]; // 2 for the two frame animation

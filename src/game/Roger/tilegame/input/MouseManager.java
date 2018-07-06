@@ -1,5 +1,7 @@
 package game.Roger.tilegame.input;
 
+import game.Roger.tilegame.ui.UIManager;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -8,11 +10,15 @@ public class MouseManager implements MouseListener, MouseMotionListener {
 
     private boolean leftPressed, rightPressed;
     private int mouseX, mouseY; //position of mouse on screen
+    private UIManager uiManager;
 
     public MouseManager() {
 
     }
 
+    public void setUIManager(UIManager uiManager) {
+        this.uiManager = uiManager;
+    }
     //Getters
 
     public boolean isLeftPressed() {
@@ -69,6 +75,10 @@ public class MouseManager implements MouseListener, MouseMotionListener {
             leftPressed = false;
         else if (e.getButton() == MouseEvent.BUTTON3) //right button
             rightPressed = false;
+
+        //UIManager mouse listener
+        if (uiManager != null)
+            uiManager.onMouseRelease(e);
     }
 
     /**
@@ -119,5 +129,9 @@ public class MouseManager implements MouseListener, MouseMotionListener {
     public void mouseMoved(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
+
+        //UIManager mouse listener
+        if (uiManager != null)
+            uiManager.onMouseMove(e);
     }
 }
